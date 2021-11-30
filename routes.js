@@ -7,7 +7,12 @@ let router = express.Router();
 // Import formation controller
 let formationController = require('./controllers/formationController');
 
-router.get('/', (req, res) => res.redirect('/formations'));
+// Import logging controller
+let loginController = require('./controllers/loginController');
+
+router.get('/', (req, res) => res.redirect('/login'));
+router.get('/login', loginController.loginSetup);
+router.post('/login', loginController.loginCheck);
 router.get('/formations', formationController.formationList);
 
 // Export the router module
