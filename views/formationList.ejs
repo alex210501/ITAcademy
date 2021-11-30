@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Formations</title>
+</head>
+<body>
+	<h1>IT Academy</h1>
+	<h2>Formations disponibles</h2>
+
+	<form action="/cart" method="GET">
+		<ul>
+			<% formations.forEach(formation=> { %>
+				<li>Formation: <%= formation.name %>, Price: <%= formation.price %>
+				</li>
+			<% }) %>
+		</ul>
+	</form>
+</body>
+</html>
