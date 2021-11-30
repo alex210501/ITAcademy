@@ -30,6 +30,11 @@
                 <td><%= formation.price %></td>
                 <td><%= formation.startdate %></td>
                 <td><%= formation.enddate %></td>
+                <td>
+                    <a href="/formations/subscribe/<%= formation.idformation %>">
+                        <button id="subscribe">S'inscrire</button>
+                    </a>
+                </td>
             </tr>
 		<% }) %>
     </table>

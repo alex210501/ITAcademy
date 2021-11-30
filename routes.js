@@ -14,6 +14,7 @@ router.get('/', (req, res) => res.redirect('/login'));
 router.get('/login', loginController.loginSetup);
 router.post('/login', loginController.loginCheck);
 router.get('/formations', formationController.formationList);
+router.get('/formations/subscribe/:idformation', formationController.formationSubscribe);
 
 // Export the router module
 module.exports = router;

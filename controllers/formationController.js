@@ -15,3 +15,18 @@ module.exports.formationList = function (req, res) {
     }
     else res.send('Access denied');
 }
+
+module.exports.formationSubscribe = function(req, res) {
+    let idFormation = req.params.idformation;
+    let user;
+    
+    database.query("SELECT iduser from user WHERE pseudo=?", req.session.user, (error, result) => {
+            if (error) console.log(error);
+            else {
+                let idUser = result[0].iduser;
+                database.query("INSERT INTO subscription (iduser, idformation) VALUES (?,?)",
+                              [idUser, idFormation], (error, result) => {if (error) console.log(error)});
+            }
+        });
+    res.redirect('/formations');
+}
