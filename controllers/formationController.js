@@ -9,7 +9,6 @@ module.exports.formationList = function (req, res) {
 			console.log(result);
 			formationList = result;
 		}
-		res.render('formationList.ejs', { formations: result});
+		res.render('formationList.ejs', { formations: formationList});
 	});
-
 }
