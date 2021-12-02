@@ -72,5 +72,18 @@ module.exports.deleteSubscription = function(req, res) {
 }
 
 module.exports.endSubscription = function(req, res) {
-    
+    console.log(req.session.iduser);
+    // if (req.session.user) {
+        database.query("DELETE FROM subscription WHERE iduser=?", req.session.iduser,
+                      (error, result) => {
+            if (error) console.log(error);
+            else {
+                database.query("INSERT INTO subscription (iduser, idformation) VALUES ?", [ formationSubscribed.map(formation => [req.session.iduser, formation.idformation])], (error, result) => {
+                if (error) console.log(error);
+                else console.log(result); 
+                });
+            }
+        });   
+    // }
+    res.redirect('/formations');
 }

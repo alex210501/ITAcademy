@@ -25,9 +25,10 @@ module.exports.loginCheck = async function(req, res) {
         checkUserRegistration(user);
         database.query('SELECT iduser, pseudo FROM user WHERE pseudo=?', user,
                       (error, result) => {
-                       req.session.user = result[0].pseudo;
-                       req.session.iduser = result[0].iduser;
+            req.session.user = result[0].pseudo;
+            req.session.iduser = result[0].iduser;
+            
+            res.redirect('/formations');
                        });
         }
-    res.redirect('/formations');
 }
