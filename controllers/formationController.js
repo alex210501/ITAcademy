@@ -64,10 +64,13 @@ module.exports.deleteSubscription = function(req, res) {
                     if (formationSubscribed[i].idformation == idFormation)
                         formationSubscribed.splice(i, 1);
                 }
-                console.log(formationSubscribed);
             }
         }
         
         res.redirect('/cart');
     });
+}
+
+module.exports.endSubscription = function(req, res) {
+    
 }

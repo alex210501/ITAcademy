@@ -17,6 +17,7 @@ router.get('/formations', formationController.formationList);
 router.get('/formations/subscribe/:idformation', formationController.formationSubscribe);
 router.get('/cart', formationController.cartList);
 router.get('/cart/delete/:idformation', formationController.deleteSubscription);
+router.get('/cart/endSubscription', formationController.endSubscription);
 
 // Export the router module
 module.exports = router;
