@@ -1,4 +1,21 @@
+// Import databse
 let database = require('../database');
+
+// Import formation
+let Formation = require('../models/formationModel');
+
+formationSubscribed = []
+
+function checkFormationSubscibed(formation) {
+    let isSubscibed = false;
+
+    formationSubscribed.forEach(element => {
+       if  (element.idformation == formation.idformation)
+           isSubscibed = true;
+    });
+    
+    return isSubscibed;
+}
 
 module.exports.formationList = function (req, res) {
 	formationList = [];
@@ -16,22 +33,23 @@ module.exports.formationList = function (req, res) {
 module.exports.formationSubscribe = function(req, res) {
     let idFormation = parseInt(req.params.idformation);
     
-    database.query("SELECT iduser from user WHERE pseudo=?", req.session.user, (error, result) => {
+    database.query('SELECT * FROM formation WHERE idformation = ?', idFormation,
+                  (error, result) => {
         if (error) console.log(error);
         else {
-            let idUser = parseInt(result[0].iduser);
-            
-            // Check if the values are not on the subscription table
-            database.query("SELECT * FROM subscription WHERE iduser=? AND idformation=?", [idUser, idFormation], (error, result) => {
-                if (error) console.log(error);
-                else {
-                    if (result.length == 0) { 
-                        database.query("INSERT INTO subscription (iduser, idformation) VALUES (?,?)",   
-                                      [idUser, idFormation], (error, result) => {if (error) console.log(error)});    
-                    }
-                }
-            });
+            formation = new Formation(idFormation, result[0].name, result[0].price,
+                                      result[0].startdate, result[0].enddate);
+            if (checkFormationSubscibed(formation) == false) {
+                formationSubscribed.push(formation);
+                console.log(formationSubscribed);
+                formationSubscribed.sort();
+            }
         }
     });
+
     res.redirect('/formations');
+}
+
+module.exports.cartList = function(req, res) {
+    res.render('cartList.ejs', {formations: formationSubscribed});
 }

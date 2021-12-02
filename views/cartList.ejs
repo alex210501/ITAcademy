@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <link rel="stylesheet" href="./css/formationListStyle.css">
+	<title>Cart</title>
+</head>
+<body>
+	<h1>IT Academy</h1>
+    <h2>Panier</h2>
+
+	<div>
+        <a href="/cart/endSubscription">
+            <button type="button">Finaliser l'inscription</button>
+        </a>
+        <a href="/formations">
+            <button type="button">Retourner au catalogue de formations</button>
+        </a>
+    </div>
+
+	<table id="cart-table">
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Début</th>
+            <th>Fin</th>
+        </tr>
+        
+		<% formations.forEach(formation=> { %>
+            <tr>
+                <td><%= formation.idformation %></td>
+                <td><%= formation.name %></td>
+                <td><%= formation.price %></td>
+                <td><%= formation.startdate %></td>
+                <td><%= formation.enddate %></td>
+                <td>
+                    <a href="/formations/delete/<%= formation.idformation %>">
+                        <button id="delete-subscription">Supprimer</button>
+                    </a>
+                </td>
+            </tr>
+		<% }) %>
+    </table>
+</body>
+</html>
