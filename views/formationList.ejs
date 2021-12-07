@@ -11,12 +11,9 @@
 	<h2>Formations disponibles</h2>
 
 	<div>
-        <a href="/cart">
-            <button type="button" class="action-button">Voir le panier</button>
-        </a>
-        <a href="/login">
-            <button type="button" class="action-button">Se connecter</button>
-        </a>
+        <button type="button" class="action-button" onclick="window.location='/cart'">Voir le panier</button>
+        
+        <button type="button" class="action-button" onclick="window.location='/login'">Se connecter</button>
     </div>
 
 	<table id="formation-table">
@@ -36,9 +33,7 @@
                 <td><%= formation.startdate %></td>
                 <td><%= formation.enddate %></td>
                 <td>
-                    <a href="/formations/subscribe/<%= formation.idformation %>">
-                        <button id="subscribe-button">S'inscrire</button>
-                    </a>
+                    <button id="subscribe-button" onclick="window.location='/formations/subscribe/<%= formation.idformation %>'">S'inscrire</button>
                 </td>
             </tr>
 		<% }) %>

@@ -11,13 +11,10 @@
     <h2>Panier</h2>
 
 	<div>
-        <a href="/cart/endSubscription">
-            <button type="button" class="action-button">Finaliser l'inscription</button>
-        </a>
-        <a href="/formations">
-            <button type="button" class="action-button">Retourner au catalogue de formations</button>
-        </a>
-    </div>
+        <button type="button" class="action-button" onclick="window.location='/cart/endSubscription'">Finaliser l'inscription</button>
+
+        <button type="button" class="action-button" onclick="window.location='/formations'">Retourner au catalogue de formations</button>
+</div>
 
 	<table id="cart-table">
         <tr>
@@ -36,9 +33,7 @@
                 <td><%= formation.startdate %></td>
                 <td><%= formation.enddate %></td>
                 <td>
-                    <a href="/cart/delete/<%= formation.idformation %>">
-                        <button id="delete-subscription">Supprimer</button>
-                    </a>
+                    <button id="delete-subscription" onclick="window.location='/cart/delete/<%= formation.idformation %>'">Supprimer</button>
                 </td>
             </tr>
 		<% }) %>
