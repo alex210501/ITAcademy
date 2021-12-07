@@ -20,8 +20,11 @@ app.use(express.static('./public'));
 let router = require('./routes');
 app.use('/', router);
 
+// Create port
+let port = 2121;
+
 // Listen to the specified port
-app.listen(8000, () => {
-	console.log('Running on port 8000');
+app.listen(port, () => {
+	console.log('Running on port ' + port);
 });
 

@@ -12,7 +12,9 @@ let loginController = require('./controllers/loginController');
 
 router.get('/', (req, res) => res.redirect('/formations'));
 router.get('/login', loginController.loginSetup);
+router.get('/cart/login', loginController.cartLoginSetup);
 router.post('/login', loginController.loginCheck);
+router.post('/cart/login', loginController.cartLoginCheck);
 router.get('/formations', formationController.formationList);
 router.get('/formations/subscribe/:idformation', formationController.formationSubscribe);
 router.get('/cart', formationController.cartList);

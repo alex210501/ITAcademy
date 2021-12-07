@@ -18,6 +18,10 @@ module.exports.loginSetup = function(req, res) {
     res.render('login.ejs');
 }
 
+module.exports.cartLoginSetup = function(req, res) {
+    res.render('cartLogin.ejs');
+}
+
 module.exports.loginCheck = async function(req, res) {
     let user = req.body.user;
     
@@ -27,8 +31,21 @@ module.exports.loginCheck = async function(req, res) {
                       (error, result) => {
             req.session.user = result[0].pseudo;
             req.session.iduser = result[0].iduser;
-            
             res.redirect('/formations');
-                       });
-        }
+        });
+    }
+}
+
+module.exports.cartLoginCheck = async function(req, res) {
+    let user = req.body.user;
+    
+    if (user) {
+        checkUserRegistration(user);
+        database.query('SELECT iduser, pseudo FROM user WHERE pseudo=?', user,
+                      (error, result) => {
+            req.session.user = result[0].pseudo;
+            req.session.iduser = result[0].iduser;
+            res.redirect('/cart/endSubscription');
+        });
+    }
 }
