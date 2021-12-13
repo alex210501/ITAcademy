@@ -27,11 +27,13 @@ module.exports.loginCheck = async function(req, res) {
     
     if (user) {
         checkUserRegistration(user);
-        database.query('SELECT iduser, pseudo FROM user WHERE pseudo=?', user,
+        database.query('SELECT * FROM user WHERE pseudo=?', user,
                       (error, result) => {
-            req.session.user = result[0].pseudo;
-            req.session.iduser = result[0].iduser;
-            res.redirect('/formations');
+            if (result.length > 0) {
+                req.session.user = result[0].pseudo;
+                req.session.iduser = result[0].iduser;
+                res.redirect('/formations');   
+            }
         });
     }
 }
@@ -43,9 +45,11 @@ module.exports.cartLoginCheck = async function(req, res) {
         checkUserRegistration(user);
         database.query('SELECT iduser, pseudo FROM user WHERE pseudo=?', user,
                       (error, result) => {
-            req.session.user = result[0].pseudo;
-            req.session.iduser = result[0].iduser;
-            res.redirect('/cart/endSubscription');
+            if (result.length > 0) {
+                req.session.user = result[0].pseudo;
+                req.session.iduser = result[0].iduser;
+                res.redirect('/cart/endSubscription');
+            }
         });
     }
 }
