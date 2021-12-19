@@ -21,7 +21,7 @@ let router = require('./routes');
 app.use('/', router);
 
 // Create port
-let port = 2121;
+let port = 80;
 
 // Listen to the specified port
 app.listen(port, () => {

@@ -1,54 +1,49 @@
 let database = require('../database');
 
 
-function checkUserRegistration(user) {
-    database.query('SELECT * FROM user WHERE pseudo=?', user, (error, pseudo) => {
-        if (error) console.log(error);
-        else {
-            if (!(pseudo.length > 0)) {
-                     database.query('INSERT INTO user (pseudo) VALUES (?)', user,
-                                   (error, result) => {if (error)console.log(error);
-                                                       console.log(result)} );
-                }
-        }
-    });
-}
-
-module.exports.loginSetup = function(req, res) {
+module.exports.loginSetup = function (req, res) {
     res.render('login.ejs');
 }
 
-module.exports.cartLoginSetup = function(req, res) {
+module.exports.cartLoginSetup = function (req, res) {
     res.render('cartLogin.ejs');
 }
 
-module.exports.loginCheck = async function(req, res) {
+module.exports.loginCheck = async function (req, res) {
     let user = req.body.user;
-    
+
     if (user) {
-        checkUserRegistration(user);
-        database.query('SELECT * FROM user WHERE pseudo=?', user,
-                      (error, result) => {
-            if (result.length > 0) {
-                req.session.user = result[0].pseudo;
-                req.session.iduser = result[0].iduser;
-                res.redirect('/formations');   
+        database.query('insert into formations.user (pseudo) Select ? Where not exists(select * from formations.user where pseudo = ?)', [user, user], (error, pseudo) => {
+            if (error) console.log(error);
+            else {
+                database.query('SELECT * FROM user WHERE pseudo=?', user, (error, result) => {
+                    console.log(result);
+                    if (result.length > 0) {
+                        req.session.user = result[0].pseudo;
+                        req.session.iduser = result[0].iduser;
+                    }
+                    res.redirect('/formations');
+                });
             }
         });
     }
 }
 
-module.exports.cartLoginCheck = async function(req, res) {
+module.exports.cartLoginCheck = async function (req, res) {
     let user = req.body.user;
-    
+
     if (user) {
-        checkUserRegistration(user);
-        database.query('SELECT iduser, pseudo FROM user WHERE pseudo=?', user,
-                      (error, result) => {
-            if (result.length > 0) {
-                req.session.user = result[0].pseudo;
-                req.session.iduser = result[0].iduser;
-                res.redirect('/cart/endSubscription');
+        database.query('insert into formations.user (pseudo) Select ? Where not exists(select * from formations.user where pseudo = ?)', [user, user], (error, pseudo) => {
+            if (error) console.log(error);
+            else {
+                database.query('SELECT * FROM user WHERE pseudo=?', user, (error, result) => {
+                    console.log(result);
+                    if (result.length > 0) {
+                        req.session.user = result[0].pseudo;
+                        req.session.iduser = result[0].iduser;
+                    }
+                    res.redirect('/cart/endSubscription');
+                });
             }
         });
     }
