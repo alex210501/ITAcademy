@@ -87,8 +87,11 @@ module.exports.endSubscription = function(req, res) {
         if (error) console.log(error);
         else {
             database.query("INSERT INTO subscription (iduser, idformation) VALUES ?", [ formationSubscribed.map(formation => [req.session.iduser, formation.idformation])], (error, result) => {
-            if (error) console.log(error);
-            else res.redirect('/formations');
+                if (error) console.log(error);
+                else {
+                    res.redirect('/formations');
+                    formationSubscribed = [];
+                }
             });
         }
     });
