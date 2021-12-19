@@ -4,7 +4,8 @@ let database = require('../database');
 // Import formation
 let Formation = require('../models/formationModel');
 
-formationSubscribed = []
+let formationSubscribed = [];
+let confirmationMessage = '';
 
 function checkFormationSubscibed(formation) {
     let isSubscibed = false;
@@ -24,7 +25,9 @@ module.exports.formationList = function (req, res) {
         if (error) console.log(error);
         else
             formationList = result;
-        res.render('formationList.ejs', { formations: formationList});
+        res.render('formationList.ejs', { formations: formationList, confirmationMessage: confirmationMessage});
+
+        confirmationMessage = '';
     });
 }
 
@@ -72,7 +75,8 @@ module.exports.deleteSubscription = function(req, res) {
 }
 
 module.exports.endSubscription = function(req, res) {
-    console.log(req.session.user);
+    confirmationMessage = "Enregistrement réussi !"
+
     if (req.session.user == undefined) {
         res.redirect('/cart/login');
         return;

@@ -17,7 +17,6 @@ module.exports.loginCheck = async function (req, res) {
             if (error) console.log(error);
             else {
                 database.query('SELECT * FROM user WHERE pseudo=?', user, (error, result) => {
-                    console.log(result);
                     if (result.length > 0) {
                         req.session.user = result[0].pseudo;
                         req.session.iduser = result[0].iduser;
@@ -37,7 +36,6 @@ module.exports.cartLoginCheck = async function (req, res) {
             if (error) console.log(error);
             else {
                 database.query('SELECT * FROM user WHERE pseudo=?', user, (error, result) => {
-                    console.log(result);
                     if (result.length > 0) {
                         req.session.user = result[0].pseudo;
                         req.session.iduser = result[0].iduser;
