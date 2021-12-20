@@ -82,6 +82,7 @@ module.exports.endSubscription = function(req, res) {
         return;
     }
     
+    // Delete all the subscription
     database.query("DELETE FROM subscription WHERE iduser=?", req.session.iduser,
                   (error, result) => {
         if (error) console.log(error);

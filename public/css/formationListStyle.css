@@ -20,11 +20,12 @@ th
     font-weight: bold;   
 }
 
-table, tr, th, td
+table th, td
 {
     padding: 5px;
-    border: 1px solid black;
+    border: 1px solid lightgray;
     border-collapse: collapse;
+    text-align: left;
 }
 
 .action-button
