@@ -10,6 +10,7 @@ let formationController = require('./controllers/formationController');
 // Import logging controller
 let loginController = require('./controllers/loginController');
 
+// Redirection for all the routes (get and post)
 router.get('/', (req, res) => res.redirect('/formations'));
 router.get('/login', loginController.loginSetup);
 router.get('/cart/login', loginController.cartLoginSetup);
