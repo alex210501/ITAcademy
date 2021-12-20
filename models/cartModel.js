@@ -1,7 +1,6 @@
 class Cart {
     constructor(formations=[]) {
         this.formations = formations;
-        console.log(this.formations);
     }
 
     get formationsList() {
@@ -14,7 +13,7 @@ class Cart {
     */
     checkFormationSubscribed(formation) {
         let isSubscibed = false;
-        console.log(this.formations);
+
         this.formations.forEach(element => {
             if (element.idformation == formation.idformation)
                 isSubscibed = true;

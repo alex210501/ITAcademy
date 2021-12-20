@@ -9,12 +9,16 @@ let Formation = require('../models/formationModel');
 // The confirmation message when the subscription is done
 let confirmationMessage = '';
 
+// If the session is unitialized, add a cart object
+function checkCartExists (req) {
+    if (req.session.cart == undefined)
+        req.session.cart = JSON.stringify(new Cart());
+}
+
 module.exports.formationList = function (req, res) {
 	formationList = [];
 
-    // If the session is unitialized, add a cart object
-    if (req.session.cart == undefined)
-        req.session.cart = JSON.stringify(new Cart());
+    checkCartExists(req);
 
     // Get all the formation registered on the database and display them on the screen
     database.query("SELECT * from formation", (error, result) => {
@@ -31,6 +35,8 @@ module.exports.formationList = function (req, res) {
 module.exports.formationSubscribe = function(req, res) {
     // Parse the idFormation from the request
     let idFormation = parseInt(req.params.idformation);
+
+    checkCartExists(req);
 
     // Parse the cart from the JSON format
     let cart = new Cart(JSON.parse(req.session.cart).formations);
@@ -53,13 +59,19 @@ module.exports.formationSubscribe = function(req, res) {
 }
 
 module.exports.cartList = function(req, res) {
+    checkCartExists(req);
+
+    // Get formations from the session
     let formations = JSON.parse(req.session.cart).formations;
+
     res.render('cartList.ejs', {formations: formations});
 }
 
 module.exports.deleteSubscription = function(req, res) {
     // Parse the idFormation from the request
     let idFormation = parseInt(req.params.idformation);
+
+    checkCartExists(req);
 
     // Parse the cart into the JSON format
     let cart = new Cart(JSON.parse(req.session.cart).formations);
@@ -75,6 +87,8 @@ module.exports.deleteSubscription = function(req, res) {
             // Delete the formation selected from the list
             cart.removeFormation(formation);
             req.session.cart = JSON.stringify(cart);
+
+            // Redirect to the page /cart
             res.redirect('/cart');
         }
         
@@ -82,6 +96,8 @@ module.exports.deleteSubscription = function(req, res) {
 }
 
 module.exports.endSubscription = function(req, res) {
+    checkCartExists(req);
+
     // Get the formations from the session
     let formations = JSON.parse(req.session.cart).formations;
 
