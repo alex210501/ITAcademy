@@ -1,32 +1,20 @@
 // Import databse
+const session = require('express-session');
 let database = require('../database');
+const Cart = require('../models/cartModel');
 
 // Import formation
 let Formation = require('../models/formationModel');
 
-// Formations subscribed list
-let formationSubscribed = [];
-
 // The confirmation message when the subscription is done
 let confirmationMessage = '';
 
-/*
-    Check if the formation is already on the formationSubscribed list
-    @return True if already on the list, False otherwise
-*/
-function checkFormationSubscibed(formation) {
-    let isSubscibed = false;
-
-    formationSubscribed.forEach(element => {
-       if  (element.idformation == formation.idformation)
-           isSubscibed = true;
-    });
-    
-    return isSubscibed;
-}
-
 module.exports.formationList = function (req, res) {
 	formationList = [];
+
+    // If the session is unitialized, add a cart object
+    if (req.session.cart == undefined)
+        req.session.cart = JSON.stringify(new Cart());
 
     // Get all the formation registered on the database and display them on the screen
     database.query("SELECT * from formation", (error, result) => {
@@ -43,6 +31,9 @@ module.exports.formationList = function (req, res) {
 module.exports.formationSubscribe = function(req, res) {
     // Parse the idFormation from the request
     let idFormation = parseInt(req.params.idformation);
+
+    // Parse the cart from the JSON format
+    let cart = new Cart(JSON.parse(req.session.cart).formations);
     
     // Select all the formations where the idFormtion is equal to the one requested
     database.query('SELECT * FROM formation WHERE idformation = ?', idFormation,
@@ -53,22 +44,25 @@ module.exports.formationSubscribe = function(req, res) {
             formation = new Formation(idFormation, result[0].name, result[0].price,
                                       result[0].startdate, result[0].enddate);
 
-            // Check if the formation is already subscribed
-            if (checkFormationSubscibed(formation) == false)
-                formationSubscribed.push(formation);
+            // Add new formation to the session
+            cart.addFormation(formation);
+            req.session.cart = JSON.stringify(cart);
+            res.redirect('/formations');
         }
     });
-
-    res.redirect('/formations');
 }
 
 module.exports.cartList = function(req, res) {
-    res.render('cartList.ejs', {formations: formationSubscribed});
+    let formations = JSON.parse(req.session.cart).formations;
+    res.render('cartList.ejs', {formations: formations});
 }
 
 module.exports.deleteSubscription = function(req, res) {
     // Parse the idFormation from the request
     let idFormation = parseInt(req.params.idformation);
+
+    // Parse the cart into the JSON format
+    let cart = new Cart(JSON.parse(req.session.cart).formations);
     
     // Selecy all the formations which match the idFormation
     database.query('SELECT * FROM formation WHERE idformation = ?', idFormation,
@@ -79,19 +73,18 @@ module.exports.deleteSubscription = function(req, res) {
                                       result[0].startdate, result[0].enddate);
             
             // Delete the formation selected from the list
-            if (checkFormationSubscibed(formation) == true) {
-                for (let i in formationSubscribed) {
-                    if (formationSubscribed[i].idformation == idFormation)
-                        formationSubscribed.splice(i, 1);
-                }
-            }
+            cart.removeFormation(formation);
+            req.session.cart = JSON.stringify(cart);
+            res.redirect('/cart');
         }
         
-        res.redirect('/cart');
     });
 }
 
 module.exports.endSubscription = function(req, res) {
+    // Get the formations from the session
+    let formations = JSON.parse(req.session.cart).formations;
+
     // Set the confirmation message
     confirmationMessage = "Enregistrement réussi !"
 
@@ -107,12 +100,9 @@ module.exports.endSubscription = function(req, res) {
         if (error) console.log(error);
         else {
             // Insert new subscription into the table
-            database.query("INSERT INTO subscription (iduser, idformation) VALUES ?", [ formationSubscribed.map(formation => [req.session.iduser, formation.idformation])], (error, result) => {
+            database.query("INSERT INTO subscription (iduser, idformation) VALUES ?", [formations.map(formation => [req.session.iduser, formation.idformation])], (error, result) => {
                 if (error) console.log(error);
-                else {
-                    res.redirect('/formations');
-                    formationSubscribed = [];
-                }
+                else res.redirect('/formations');
             });
         }
     });
